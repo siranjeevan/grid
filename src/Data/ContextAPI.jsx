@@ -1,5 +1,5 @@
-import React, { createContext, useState } from "react";
-export const DataContext = createContext();
+import { createContext, useState, useContext} from "react";
+const DataContext = createContext();
 
 export function DataProvider({ children }) {
 const [rowData, setRowData] = useState([
@@ -277,8 +277,8 @@ const [rowData, setRowData] = useState([
       },
     },
     { field: "model" },
-    { field: "price", filter: "agNumberColumnFilter" },
-    { field: "electric" },
+    { field: "price" },
+    { field: "electric", editable: true, cellEditor: "agSelectCellEditor", cellEditorParams: { values: ["true", "false"] } },
     {
       field: "month",
       comparator: (valueA, valueB) => {
@@ -296,18 +296,20 @@ const [rowData, setRowData] = useState([
           "November",
           "December",
         ];
-        // const idxA = months.indexOf(valueA);
-        // const idxB = months.indexOf(valueB);
-        // return idxA - idxB;
+        const idxA = months.indexOf(valueA);
+        const idxB = months.indexOf(valueB);
+        return idxA - idxB;
       },
     },
   ]);
+
+
   return (
-    <DataContext.Provider value={{ rowData, setRowData, columnDefs, setColumnDefs }}>
+    <DataContext.Provider value={{ rowData, setRowData, columnDefs, setColumnDefs  }}>
       {children}
     </DataContext.Provider>
   );
 }
-export function DataContext(){
+export function useDataContext(){
   return useContext(DataContext);
 }
