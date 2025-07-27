@@ -6,14 +6,14 @@ const [rowData, setRowData] = useState([
     {
       make: "Tesla",
       model: "Model Y",
-      price: 64950,
+      price: "64950",
       electric: true,
       month: "June",
     },
     {
       make: "Ford",
       model: "F-Series",
-      price: 33850,
+      price: "33850",
       electric: false,
       month: "October",
     },
@@ -255,9 +255,23 @@ const [rowData, setRowData] = useState([
       electric: true,
       month: "May",
     },
-  ]);
+  ].map((item, index) => ({
+    sNo: index + 1,
+    ...item,
+  }))
+);
 
   const [columnDefs, setColumnDefs] = useState([
+
+    {
+      headerName: "S.No",
+      field: "sNo",
+      width: 90,
+      sortable: false,
+      filter: false,
+      editable: false,
+    },
+
     {
       field: "make",
       editable: true,
@@ -277,7 +291,7 @@ const [rowData, setRowData] = useState([
       },
     },
     { field: "model" },
-    { field: "price" },
+    { field: "price"  },
     { field: "electric", editable: true, cellEditor: "agSelectCellEditor", cellEditorParams: { values: ["true", "false"] } },
     {
       field: "month",
@@ -302,10 +316,11 @@ const [rowData, setRowData] = useState([
       },
     },
   ]);
+  const [operation, setOperation] = useState("back"); 
 
 
   return (
-    <DataContext.Provider value={{ rowData, setRowData, columnDefs, setColumnDefs  }}>
+    <DataContext.Provider value={{ rowData, setRowData, columnDefs, setColumnDefs , operation , setOperation  }}>
       {children}
     </DataContext.Provider>
   );
