@@ -12,6 +12,7 @@ function Delete(){
     function handleSubmit(e) {
         e.preventDefault();
         const index = parseInt(deleteIndex, 10) - 1;
+
         if (index >= 0 && index < rowData.length) {
             setRowData((prev) => prev.filter((_, i) => i !== index));
             setDeleteIndex("");

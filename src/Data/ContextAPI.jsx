@@ -1,4 +1,5 @@
 import { createContext, useState, useContext} from "react";
+import NewDelete from "../Components/Operations/NewDelete";
 const DataContext = createContext();
 
 export function DataProvider({ children }) {
@@ -264,35 +265,13 @@ const [rowData, setRowData] = useState([
   const [columnDefs, setColumnDefs] = useState([
 
     {
-      headerName: "S.No",
-      field: "sNo",
-      width: 90,
-      sortable: false,
-      filter: false,
-      editable: false,
-    },
-
-    {
       field: "make",
       editable: true,
-      cellEditor: "agSelectCellEditor",
-      cellEditorParams: {
-        values: [
-          "Tesla",
-          "Ford",
-          "Toyota",
-          "Mercedes",
-          "Fiat",
-          "Nissan",
-          "Vauxhall",
-          "Volvo",
-          "Jaguar",
-        ],
-      },
     },
     { field: "model" },
     { field: "price"  },
     { field: "electric", editable: true, cellEditor: "agSelectCellEditor", cellEditorParams: { values: ["true", "false"] } },
+    
     {
       field: "month",
       comparator: (valueA, valueB) => {
@@ -315,12 +294,18 @@ const [rowData, setRowData] = useState([
         return idxA - idxB;
       },
     },
+    { field: "button", cellRenderer: NewDelete , flex : 1 },
   ]);
   const [operation, setOperation] = useState("back"); 
 
+  const [gridApi, setGridApi] = useState(null);
+
+  const [deleteIndexes, setDeleteIndexes] = useState([]);
+
 
   return (
-    <DataContext.Provider value={{ rowData, setRowData, columnDefs, setColumnDefs , operation , setOperation  }}>
+    <DataContext.Provider value={{ rowData, setRowData, columnDefs, setColumnDefs , operation , setOperation , gridApi, setGridApi , deleteIndexes,
+  setDeleteIndexes, }}>
       {children}
     </DataContext.Provider>
   );

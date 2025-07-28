@@ -1,41 +1,40 @@
-import {useDataContext} from "../../Data/ContextAPI.jsx";
+import { useDataContext } from "../../Data/ContextAPI.jsx";
 import React from "react";
-import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
-import {defaultCol} from '../GridToolbar/TextFilter.jsx';
-import {rowSelectionConfig } from '../GridToolbar/RowSelect.jsx';
-import Insert from "../Operations/Insert.jsx";
-import Delete from "../Operations/Delete.jsx";
-import Layout from "../Operations/OperationTabLayout.jsx"
-import OperationShowing from "../Operations/OperationsShowing.jsx";
-import HandleOperation from "../Operations/HandleOperation.jsx";
+import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
+import { AgGridReact } from "ag-grid-react";
+import { defaultCol } from "../GridToolbar/TextFilter.jsx";
+import Layout from "../Operations/OperationTabLayout.jsx";
+import HandleOperation from "../Operations/NewInsert.jsx";
+import DeletePopUp from "../Popup/DeletePopUp.jsx";
+import InsertPopUp from "../Popup/InsertPopUp.jsx";
 
-// Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 function Grid() {
-    const { rowData , columnDefs} = useDataContext();
+  const { rowData, columnDefs, setGridApi, operation } =
+    useDataContext();
 
-    return (
-        <>
+  return (
+    <>
+      <div className="relative h-150 w-[1100px] mx-90 my-25 shadow-lg">
+        {operation === "delete" && <DeletePopUp />}
+        {operation === "insert" && <InsertPopUp />}
 
-            <div className=" h-150 w-[1100px] mx-90 my-25 shadow-lg ">
-                
-                <AgGridReact 
-                rowData={rowData} 
-                columnDefs={columnDefs}
-                rowSelection={rowSelectionConfig}
-                defaultColDef={defaultCol}
-                pagination={true}
-                paginationPageSize={5}
-                paginationPageSizeSelector={[5 ,10, 25, 50]}
-                />
-                <Layout >
-                 <HandleOperation />
-                </Layout>
-            </div>
-
-        </>
-    );
+        <AgGridReact
+          rowData={rowData}
+          columnDefs={columnDefs}
+          rowSelection="multiple" 
+          pagination={true}
+          paginationPageSize={5}
+          paginationPageSizeSelector={[5, 10, 25, 50]}
+          onGridReady={(params) => setGridApi(params.api)}
+        />
+        <Layout>
+            <HandleOperation />
+        </Layout>
+      </div>
+    </>
+  );
 }
+
 export default Grid;
